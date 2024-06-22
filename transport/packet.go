@@ -1,6 +1,6 @@
 package transport
 
-type command struct {
+type Command struct {
 	Len    byte
 	Adr    byte //0x00 - 0xFE. 0xFF broadcast address
 	Cmd    byte
@@ -9,7 +9,7 @@ type command struct {
 	MsbCRC byte
 }
 
-type response struct {
+type Response struct {
 	Len    byte
 	Adr    byte
 	ReCmd  byte
@@ -17,6 +17,21 @@ type response struct {
 	Data   []byte
 	LsbCRC byte
 	MsbCRC byte
+}
+
+type DataInventory struct {
+	Ant byte
+	Num byte
+	EPC []byte
+	LSB byte
+	MSB byte
+}
+type EPC struct {
+	DataLen byte
+	Data    []byte
+	RSSI    byte
+	Phase   []byte
+	Freq    []byte
 }
 
 //Data: 15(len) [00](addr) [01](ReCMD)[03](Fruther data will be transfered)

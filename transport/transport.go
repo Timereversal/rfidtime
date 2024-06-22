@@ -30,6 +30,10 @@ func DialTcp(address string) error {
 			break
 		}
 		fmt.Printf("Received: %d bytes %X \n", n, string(buf[:n]))
+		err = deserialization(buf[:n], n)
+		if err != nil {
+			return fmt.Errorf("error deserializing %s", err)
+		}
 	}
 	return nil
 }
@@ -51,5 +55,22 @@ func deserialization(payload []byte, bytesNumber int) error {
 
 func handlePacket(packet []byte) {
 	fmt.Printf("%X", packet)
+	// packet analysis response.
+	//MSB LSB are not included
+	packetR := Response{Len: packet[0], Adr: packet[1], ReCmd: packet[2], Status: packet[3], Data: packet[4:len(packet)]}
+
+	// handling Response Command of 0x01 [Tag Inventory request]
+	if packetR.ReCmd == 0x01 {
+		switch packetR.Status {
+		case 0x01:
+			fmt.Println("tag inventory command succesfull delivered, reader will transmit")
+		case 0x02:
+			fmt.Println("tag inventory command, reader fails to complete the inventory within the predefined inventory time.")
+		case 0x03:
+			fmt.Println("Data being transmitted")
+		case 0xF8:
+			fmt.Println("Antenna Error Detected")
+		}
+	}
 	return
 }
