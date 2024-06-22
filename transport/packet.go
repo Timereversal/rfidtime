@@ -20,19 +20,24 @@ type Response struct {
 }
 
 type DataInventory struct {
-	Ant byte
-	Num byte
-	EPC []byte
-	LSB byte
-	MSB byte
-}
-type EPC struct {
-	DataLen byte
-	Data    []byte
+	Ant     byte
+	Num     byte
+	EPCLen  byte
+	EPCData []byte
 	RSSI    byte
 	Phase   []byte
 	Freq    []byte
+	LSB     byte
+	MSB     byte
 }
+
+//type EPC struct {
+//	EPCLen byte
+//	EPCData    []byte
+//	RSSI    byte
+//	Phase   []byte
+//	Freq    []byte
+//}
 
 //Data: 15(len) [00](addr) [01](ReCMD)[03](Fruther data will be transfered)
 //	    [01](antena)[01](only-1 tag )[0c]e28068940000500a9d2298c6  48257e

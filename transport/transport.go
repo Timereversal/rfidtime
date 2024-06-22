@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"time"
 )
 
 func DialTcp(address string) error {
@@ -46,7 +47,8 @@ func deserialization(payload []byte, bytesNumber int) error {
 	for totalBytes < bytesNumber {
 		lenPacket := int(payload[totalBytes])
 
-		go handlePacket(payload[totalBytes : totalBytes+lenPacket])
+		go handlePacket(payload[totalBytes : totalBytes+lenPacket+1])
+		//go handlePacket(payload[totalBytes : totalBytes+lenPacket])
 		totalBytes += lenPacket + 1
 	}
 
@@ -54,7 +56,8 @@ func deserialization(payload []byte, bytesNumber int) error {
 }
 
 func handlePacket(packet []byte) {
-	fmt.Printf("%X", packet)
+	//fmt.Printf("%X ", packet)
+	dt := time.Now()
 	// packet analysis response.
 	//MSB LSB are not included
 	packetR := Response{Len: packet[0], Adr: packet[1], ReCmd: packet[2], Status: packet[3], Data: packet[4:len(packet)]}
@@ -64,10 +67,15 @@ func handlePacket(packet []byte) {
 		switch packetR.Status {
 		case 0x01:
 			fmt.Println("tag inventory command succesfull delivered, reader will transmit")
+
 		case 0x02:
 			fmt.Println("tag inventory command, reader fails to complete the inventory within the predefined inventory time.")
 		case 0x03:
-			fmt.Println("Data being transmitted")
+			// EPCData is Ok if bit 6 and bit7 of PacketR.Data[2] are 0
+			epcInfo := DataInventory{Ant: packetR.Data[0],
+				EPCData: packetR.Data[3 : 3+int(packetR.Data[2])],
+				RSSI:    packetR.Data[3+int(packetR.Data[2])]}
+			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
 		case 0xF8:
 			fmt.Println("Antenna Error Detected")
 		}
