@@ -7,7 +7,11 @@ import (
 	"time"
 )
 
-var cmdRequestInventory = []byte{0x09, 0x00, 0x01, 0x04, 0xfe, 0x00, 0x80, 0x32, 0x80, 0xbe}
+var cmdAnswerMode = []byte{0x09, 0x00, 0x01, 0x04, 0xfe, 0x00, 0x80, 0x32, 0x80, 0xbe}
+
+var cmdRealTimeInventoryParam = []byte{}
+var cmdModeRealTimeInventory = []byte{0x05, 0x00, 0x76, 0x01, 0xeb, 0xd8}
+var cmdModeAnswer = []byte{0x05, 0x00, 0x76, 0x00, 0x62, 0xc9}
 
 type ChafonInterface interface {
 	SendCommand([]byte) error
@@ -87,18 +91,32 @@ func (cf *Chafon) handlePacket(packet []byte) {
 	// Packet parsing
 	packetR := Response{Len: packet[0], Adr: packet[1], ReCmd: packet[2], Status: packet[3], Data: packet[4:len(packet)]}
 
-	// handling Response Command of 0x01 [Tag Inventory request]
+	if packetR.ReCmd == 0xee { // set mode RealTime Inventory
+		switch packetR.Status {
+		case 0x00:
+			// Detected appropiate tag
+			fmt.Println("Detected Appropiate tag")
+			epcInfo := DataInventory{
+				Ant:     packetR.Data[0],
+				EPCData: packetR.Data[2 : 1+int(packetR.Data[1])],
+				RSSI:    packetR.Data[2+int(packetR.Data[1])]}
+			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
+
+		}
+		return
+	}
+	// handling Response Command of 0x01 [Answer Mode - Tag Inventory request]
 	if packetR.ReCmd == 0x01 {
 		switch packetR.Status {
 		case 0x01:
 			fmt.Println("tag inventory command succesfull delivered, reader will transmit")
 			// Send request Inventory to start again .
-			err := cf.SendCommand(cmdRequestInventory)
+			err := cf.SendCommand(cmdAnswerMode)
 			if err != nil {
 				fmt.Println("error during HandlePacket Case 0x01")
 			}
 			// Send continuosly Inventory commands or stop gracefully
-			//err := ChafonInterface.SendCommand(cmdRequestInventory)
+			//err := ChafonInterface.SendCommand(cmdAnswerMode)
 			//if err != nil {
 			//	fmt.Printf("error during sending command to Chafon %s", err)
 			//}
@@ -113,6 +131,7 @@ func (cf *Chafon) handlePacket(packet []byte) {
 		case 0xF8:
 			fmt.Println("Antenna Error Detected")
 		}
+		return
 	}
 
 }
@@ -179,7 +198,7 @@ func handlePacket(packet []byte) {
 		case 0x01:
 			fmt.Println("tag inventory command succesfull delivered, reader will transmit")
 			// Send continuosly Inventory commands or stop gracefully
-			//err := ChafonInterface.SendCommand(cmdRequestInventory)
+			//err := ChafonInterface.SendCommand(cmdAnswerMode)
 			//if err != nil {
 			//	fmt.Printf("error during sending command to Chafon %s", err)
 			//}

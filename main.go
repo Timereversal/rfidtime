@@ -3,15 +3,21 @@ package main
 import (
 	"fmt"
 	"github.com/sigurn/crc16"
+	"log/slog"
 	"rfidtime/transport"
 )
 
-func calCRC16LSBMSB([]byte) (byte, byte) {
-
-	return 0, 0
-}
+//func calCRC16LSBMSB([]byte) (byte, byte) {
+//
+//	return 0, 0
+//}
 
 func main() {
+	//log.Print("Info message")
+	slog.Info("Hello world!")
+	//slog.Info("Info message")
+	//jsonHandler := slog.NewJSONHandler(os.Stderr, nil)
+	//slog.Info("hello", "count", 3)
 	var chafonCRC uint16 = 0x8408
 	chafon := crc16.Params{Poly: chafonCRC, Init: 0xFFFF}
 
