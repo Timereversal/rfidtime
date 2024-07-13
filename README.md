@@ -20,3 +20,13 @@
 # Data: 09000104fe0180325ce4
 # anatomy Data: 09 00 01 04(Qvalue) fe(Session) 01(MaskMem) 8032(MaskAddres) 5c(MaskLen) e4
 
+
+
+#########################################
+#########################################
+TODO List
+ -  Define clear Inventory initialization Pro and cons.
+ -  Find a way to send a command to stop realtime inventory on demand like graceful shutdown
+ -  Test Realtime inventory with more labels.
+ -  Find a way to perform Answer Mode inventory/ equipment no anwser always to the same command.
+ -  add file log.

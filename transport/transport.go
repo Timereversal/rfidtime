@@ -11,7 +11,7 @@ var cmdAnswerMode = []byte{0x09, 0x00, 0x01, 0x04, 0xfe, 0x00, 0x80, 0x32, 0x80,
 
 var cmdRealTimeInventoryParam = []byte{}
 var cmdModeRealTimeInventory = []byte{0x05, 0x00, 0x76, 0x01, 0xeb, 0xd8}
-var cmdModeAnswer = []byte{0x05, 0x00, 0x76, 0x00, 0x62, 0xc9}
+var CmdModeAnswer = []byte{0x05, 0x00, 0x76, 0x00, 0x62, 0xc9}
 
 type ChafonInterface interface {
 	SendCommand([]byte) error
@@ -22,9 +22,11 @@ type Chafon struct {
 	connection *net.Conn
 }
 
-func NewChafon(address string) (ChafonInterface, error) {
+// NewChafon generate a Chafon struct pointer where address is chafon reader ip
+// address format example 192.168.1.200:27011
+func NewChafon(address string) (*Chafon, error) {
 	conn, err := net.Dial("tcp", address)
-	defer conn.Close()
+	//defer conn.Close()
 	if err != nil {
 		return &Chafon{}, nil
 	}
@@ -33,7 +35,9 @@ func NewChafon(address string) (ChafonInterface, error) {
 	return &cf, nil
 }
 
+// SendCommand delivery commands trough Chafon net connection
 func (cf *Chafon) SendCommand(cmd []byte) error {
+	// Which kind of errors are considered in Net Conn Write ?
 	_, err := (*cf.connection).Write(cmd)
 	//_, err = cf.connection.Write(cmd)
 	if err != nil {
@@ -46,8 +50,14 @@ func (cf *Chafon) ReceiveCommand() ([]byte, error) {
 	return []byte{}, nil
 }
 
-func (cf *Chafon) startInventory() error {
+// StartInventory - there are several ways to perform Inventory
+// current mode only support RealTimeInventory
+func (cf *Chafon) StartInventory() error {
 	// byte qty per rfid AlienH3  22bytes
+	err := cf.SendCommand(cmdModeRealTimeInventory)
+	if err != nil {
+		return err
+	}
 	buf := make([]byte, 1024)
 	for {
 		n, err := (*cf.connection).Read(buf)
@@ -91,6 +101,7 @@ func (cf *Chafon) handlePacket(packet []byte) {
 	// Packet parsing
 	packetR := Response{Len: packet[0], Adr: packet[1], ReCmd: packet[2], Status: packet[3], Data: packet[4:len(packet)]}
 
+	// handling response of RealTime inventory [Handle set mode Realtime Inventory]
 	if packetR.ReCmd == 0xee { // set mode RealTime Inventory
 		switch packetR.Status {
 		case 0x00:
