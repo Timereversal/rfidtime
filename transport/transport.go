@@ -13,6 +13,8 @@ var cmdRealTimeInventoryParam = []byte{}
 var cmdModeRealTimeInventory = []byte{0x05, 0x00, 0x76, 0x01, 0xeb, 0xd8}
 var CmdModeAnswer = []byte{0x05, 0x00, 0x76, 0x00, 0x62, 0xc9}
 
+// channel to communicate with logger goroutine (struct DataInventory transmitted)
+
 type ChafonInterface interface {
 	SendCommand([]byte) error
 	startInventory() error
@@ -52,7 +54,7 @@ func (cf *Chafon) ReceiveCommand() ([]byte, error) {
 
 // StartInventory - there are several ways to perform Inventory
 // current mode only support RealTimeInventory
-func (cf *Chafon) StartInventory() error {
+func (cf *Chafon) StartInventory(out chan<- DataInventory) error {
 	// byte qty per rfid AlienH3  22bytes
 	err := cf.SendCommand(cmdModeRealTimeInventory)
 	if err != nil {
@@ -69,7 +71,7 @@ func (cf *Chafon) StartInventory() error {
 		}
 		fmt.Printf("Received: %d bytes %X \n", n, string(buf[:n]))
 		//err = deserialization(buf[:n], n)
-		err = cf.deserialization(buf[:n], n)
+		err = cf.deserialization(buf[:n], n, out)
 		if err != nil {
 			return fmt.Errorf("error deserializing %s", err)
 		}
@@ -78,7 +80,7 @@ func (cf *Chafon) StartInventory() error {
 	return nil
 }
 
-func (cf *Chafon) deserialization(payload []byte, bytesNumber int) error {
+func (cf *Chafon) deserialization(payload []byte, bytesNumber int, out chan<- DataInventory) error {
 	var totalBytes int
 
 	for totalBytes < bytesNumber {
@@ -86,14 +88,14 @@ func (cf *Chafon) deserialization(payload []byte, bytesNumber int) error {
 
 		//go handlePacket(payload[totalBytes : totalBytes+lenPacket+1])
 
-		go cf.handlePacket(payload[totalBytes : totalBytes+lenPacket+1])
+		go cf.handlePacket(payload[totalBytes:totalBytes+lenPacket+1], out)
 		totalBytes += lenPacket + 1
 	}
 
 	return nil
 }
 
-func (cf *Chafon) handlePacket(packet []byte) {
+func (cf *Chafon) handlePacket(packet []byte, out chan<- DataInventory) {
 
 	dt := time.Now()
 	// packet analysis response.
@@ -112,7 +114,7 @@ func (cf *Chafon) handlePacket(packet []byte) {
 				EPCData: packetR.Data[2 : 1+int(packetR.Data[1])],
 				RSSI:    packetR.Data[2+int(packetR.Data[1])]}
 			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
-
+			out <- epcInfo
 		}
 		return
 	}

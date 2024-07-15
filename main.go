@@ -2,20 +2,35 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log/slog"
+	"os"
+	"os/signal"
 	"rfidtime/transport"
+	"syscall"
 )
 
-//func calCRC16LSBMSB([]byte) (byte, byte) {
+// func calCRC16LSBMSB([]byte) (byte, byte) {
 //
-//	return 0, 0
-//}
+//		return 0, 0
+//	}
+var chanInventory = make(chan transport.DataInventory, 10)
 
 func main() {
 	//log.Print("Info message")
-	slog.Info("Hello world!")
+	c := make(chan os.Signal)
+	signal.Notify(c, os.Interrupt, syscall.SIGTERM)
+
+	file, err := os.Create("testing")
+	if err != nil {
+		slog.Error("Error opening file: ", err)
+		panic(err)
+	}
+
 	//slog.Info("Info message")
-	//jsonHandler := slog.NewJSONHandler(os.Stderr, nil)
+	logger := slog.New(slog.NewTextHandler(file, nil))
+	slog.SetDefault(logger)
+	slog.Info("Hello world!")
 	//slog.Info("hello", "count", 3)
 	//var chafonCRC uint16 = 0x8408
 	//chafon := crc16.Params{Poly: chafonCRC, Init: 0xFFFF}
@@ -28,10 +43,25 @@ func main() {
 	if err != nil {
 		slog.Info(err.Error())
 	}
-	//NewChafonConnection.SendCommand(transport.CmdModeAnswer)
-	if err := NewChafonConnection.StartInventory(); err != nil {
+	go func() {
+		<-c
+		//cleanup()
+		NewChafonConnection.SendCommand(transport.CmdModeAnswer)
+		os.Exit(1)
+	}()
+
+	go func(in <-chan transport.DataInventory) {
+		// how to read
+		for v := range in {
+			fmt.Printf("%+v", v)
+			slog.Info("log data structure", "epc", v)
+		}
+	}(chanInventory)
+
+	if err := NewChafonConnection.StartInventory(chanInventory); err != nil {
 		slog.Info(err.Error())
 	}
+
 	defer NewChafonConnection.SendCommand(transport.CmdModeAnswer)
 
 	//table := crc16.MakeTable(chafon)

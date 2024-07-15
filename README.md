@@ -1,4 +1,5 @@
 # rfidtime
+####  chip type Alien H3 9654 
 # v1
 # PC - Decoder/Encoder - 1 Antenna.
 # Almacenar los valores por cada EPC - RSSI- Time [Database or something else]
@@ -30,3 +31,18 @@ TODO List
  -  Test Realtime inventory with more labels.
  -  Find a way to perform Answer Mode inventory/ equipment no anwser always to the same command.
  -  add file log.
+ -  Define Group structure for like RunnerID , Group/Category.
+   - runner range [1-10000] 2 byte
+   - runner category [1-16] 1 byte
+        - Juvenil/Libre/Master/ etc 
+        - Subcategoria(Edades)
+        - Sexo [1bit]
+        - Distance [8-max]
+   - experimental/reserved  2 bytes
+
+Concurrency :
+Notes :
+Go Routines:
+ - Just like any other function, you can pass it parameters to initialize its state.However
+    any values returned by the function are ignored (bodner)
+ - 
