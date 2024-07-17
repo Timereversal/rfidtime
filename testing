@@ -1,26 +1,38 @@
-time=2024-07-14T17:46:21.626-05:00 level=INFO msg="Hello world!"
-time=2024-07-14T17:46:21.627-05:00 level=INFO msg=192.168.1.200:27011
-time=2024-07-14T17:46:21.635-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:60 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.635-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:59 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.638-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:63 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.639-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:63 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.639-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:61 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.640-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:59 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.640-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:63 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.640-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:59 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.640-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:65 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.641-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:63 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.768-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:62 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:21.769-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:68 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:24.335-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:94 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:24.335-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:91 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:26.894-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:94 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:26.895-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:98 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:29.451-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:90 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:29.452-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:82 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:32.007-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:99 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:32.007-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:92 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:34.552-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:90 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:34.552-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:84 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:37.080-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 169] RSSI:95 Phase:[] Freq:[] LSB:0 MSB:0}"
-time=2024-07-14T17:46:37.080-05:00 level=INFO msg="log data structure" epc="{Ant:1 Num:0 EPCLen:0 EPCData:[226 128 104 148 0 0 64 10 157 34 172] RSSI:85 Phase:[] Freq:[] LSB:0 MSB:0}"
+time=2024-07-17T02:48:22.898-05:00 level=INFO msg="Hello world!"
+time=2024-07-17T02:48:22.899-05:00 level=INFO msg=192.168.1.200:27011
+time=2024-07-17T02:48:23.091-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=60
+time=2024-07-17T02:48:25.568-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001002 rssi=59
+time=2024-07-17T02:48:25.721-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=69
+time=2024-07-17T02:48:25.721-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=69
+time=2024-07-17T02:48:25.936-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=78
+time=2024-07-17T02:48:28.203-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=104
+time=2024-07-17T02:48:28.204-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001002 rssi=92
+time=2024-07-17T02:48:28.293-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=104
+time=2024-07-17T02:48:28.293-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=99
+time=2024-07-17T02:48:28.546-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=95
+time=2024-07-17T02:48:30.407-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=103
+time=2024-07-17T02:48:30.785-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=105
+time=2024-07-17T02:48:30.831-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001002 rssi=93
+time=2024-07-17T02:48:30.831-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=101
+time=2024-07-17T02:48:31.175-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=95
+time=2024-07-17T02:48:32.597-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=105
+time=2024-07-17T02:48:33.289-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=105
+time=2024-07-17T02:48:33.337-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=101
+time=2024-07-17T02:48:33.441-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001002 rssi=93
+time=2024-07-17T02:48:33.779-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=97
+time=2024-07-17T02:48:34.770-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=105
+time=2024-07-17T02:48:35.794-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=104
+time=2024-07-17T02:48:35.824-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=99
+time=2024-07-17T02:48:36.056-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001002 rssi=92
+time=2024-07-17T02:48:36.390-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=98
+time=2024-07-17T02:48:36.969-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=100
+time=2024-07-17T02:48:38.355-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=98
+time=2024-07-17T02:48:38.355-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=90
+time=2024-07-17T02:48:38.670-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001002 rssi=86
+time=2024-07-17T02:48:38.997-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=88
+time=2024-07-17T02:48:39.261-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=88
+time=2024-07-17T02:48:40.879-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=84
+time=2024-07-17T02:48:40.916-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001005 rssi=89
+time=2024-07-17T02:48:41.278-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001002 rssi=84
+time=2024-07-17T02:48:41.564-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001004 rssi=98
+time=2024-07-17T02:48:41.611-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=91

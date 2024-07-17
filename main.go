@@ -54,7 +54,8 @@ func main() {
 		// how to read
 		for v := range in {
 			fmt.Printf("%+v", v)
-			slog.Info("log data structure", "epc", v)
+			epcS := fmt.Sprintf("%X", v.EPCData)
+			slog.Info("log data structure", "epc", epcS, "rssi", v.RSSI)
 		}
 	}(chanInventory)
 

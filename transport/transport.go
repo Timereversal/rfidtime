@@ -111,7 +111,7 @@ func (cf *Chafon) handlePacket(packet []byte, out chan<- DataInventory) {
 			fmt.Println("Detected Appropiate tag")
 			epcInfo := DataInventory{
 				Ant:     packetR.Data[0],
-				EPCData: packetR.Data[2 : 1+int(packetR.Data[1])],
+				EPCData: packetR.Data[2 : 2+int(packetR.Data[1])],
 				RSSI:    packetR.Data[2+int(packetR.Data[1])]}
 			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
 			out <- epcInfo
