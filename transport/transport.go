@@ -80,6 +80,8 @@ func (cf *Chafon) StartInventory(out chan<- DataInventory) error {
 	return nil
 }
 
+// deserialization, TCP DATA contains more than 1 EPC information. this function generate a new goroutine to process
+// each EPC information using the handlePacket function
 func (cf *Chafon) deserialization(payload []byte, bytesNumber int, out chan<- DataInventory) error {
 	var totalBytes int
 

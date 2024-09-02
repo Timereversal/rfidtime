@@ -46,3 +46,41 @@ Go Routines:
  - Just like any other function, you can pass it parameters to initialize its state.However
     any values returned by the function are ignored (bodner)
  - 
+
+-  Register Runners [example: name, cellphone, birth date]
+-  Register EventInfo [example: Event Name, Event Logo , distances [], start time , contact]
+-  Assign Runner to Event.
+
+- TODO LIST
+-  Define format for log [example: EventID, ]
+-  send telegram/whatsapp message under the following events
+    - 1 day before start.
+    - x minutes before start.
+    - cross the starting line.
+    - cross any intermediate line.
+    - cross finish.
+    - send picture/video after final line.
+- User/Runner  
+  - User Profile information category [example: category Expert, Novice, Number of Event as Runner, Position etc.]
+  - Add medal for being a participant/ add medal for position.
+  - Add Runner Certificate for each event (Download).
+- RFID system Runner Information collection
+  - RFID log information format definition
+  - RFID log information format implementation.
+  - Store Runner info Time when RSSI has the max value at the start line.
+  - Store Runner info Time when RSSI has the max value at the final Line.
+  - Store Runner info Time when RSSI has the max value at any Detection additional line.
+
+- Runner Registration on event 
+  - Payment 
+  - Registration 
+  - Assign Runner Event ID.
+
+- Entregables :
+    - Report of first 5 places for each category .
+
+    
+3 NE -
+    - Encoder/Decoder RFID Systems 
+    - WebServer to Store User/Event system
+    - 

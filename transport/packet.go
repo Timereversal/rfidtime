@@ -31,6 +31,13 @@ type DataInventory struct {
 	MSB     byte
 }
 
+// EPCData encode User-Event Information
+type EPCData struct {
+	RunnerID [2]byte // 2 bytes enough,
+	EventID  [2]byte //
+	OrgID    [2]byte
+}
+
 //type EPC struct {
 //	EPCLen byte
 //	EPCData    []byte
