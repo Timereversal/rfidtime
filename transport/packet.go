@@ -1,5 +1,7 @@
 package transport
 
+import "time"
+
 type Command struct {
 	Len    byte
 	Adr    byte //0x00 - 0xFE. 0xFF broadcast address
@@ -19,16 +21,17 @@ type Response struct {
 	MsbCRC byte
 }
 
-type DataInventory struct {
+type TagInfo struct {
 	Ant     byte
 	Num     byte
 	EPCLen  byte
 	EPCData []byte
-	RSSI    byte
+	RSSI    int
 	Phase   []byte
 	Freq    []byte
 	LSB     byte
 	MSB     byte
+	time    time.Time
 }
 
 // EPCData encode User-Event Information

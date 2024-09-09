@@ -6,12 +6,13 @@ import (
 	"log/slog"
 	"os"
 	"os/signal"
+	"rfidtime/sampling"
 	"rfidtime/transport"
 	"syscall"
 )
 
 // Channel to send logs for each goroutine[bib-tag] to a log process
-var chanInventory = make(chan transport.DataInventory, 10)
+var chanInventory = make(chan transport.TagInfo, 10)
 
 func main() {
 
@@ -47,13 +48,38 @@ func main() {
 		os.Exit(1)
 	}()
 
+	b := sampling.Broker{StreamList: make(map[string]chan transport.TagInfo)}
+
 	// Listening Channel info to generate log for each bib-tag
-	go func(in <-chan transport.DataInventory) {
+	// assign TagInfo a corresponding Channel for specific procession (max RSSI value)
+	go func(in <-chan transport.TagInfo) {
 		// how to read
-		for v := range in {
-			fmt.Printf("%+v", v)
-			epcS := fmt.Sprintf("%X", v.EPCData)
-			slog.Info("log data structure", "epc", epcS, "rssi", v.RSSI)
+		//for v := range in {
+		//	fmt.Printf("%+v", v)
+		//	epcS := fmt.Sprintf("%X", v.EPCData)
+		//	slog.Info("log data structure", "epc", epcS, "rssi", v.RSSI)
+		//}
+
+		for {
+			select {
+			case tagInfo := <-in:
+				slog.Debug("%+v", tagInfo)
+				epcS := fmt.Sprintf("%X", tagInfo.EPCData)
+
+				n := len(tagInfo.EPCData)
+				tagInfoID := fmt.Sprintf("%X", tagInfo.EPCData[n-4:])
+				slog.Info("log data structure", "epc", epcS, "rssi", tagInfo.RSSI, "tagID", tagInfoID)
+
+				_, ok := b.StreamList[tagInfoID]
+				if !ok {
+					b.StreamGenerator(tagInfoID)
+				}
+				// send TagInfo for Further procession [calculate  best sample ]
+				go func() {
+					b.StreamList[tagInfoID] <- tagInfo
+				}()
+
+			}
 		}
 	}(chanInventory)
 
@@ -61,5 +87,6 @@ func main() {
 	if err := NewChafonConnection.StartInventory(chanInventory); err != nil {
 		slog.Info(err.Error())
 	}
+	b.Wg.Wait()
 
 }
