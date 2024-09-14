@@ -3,7 +3,6 @@ package transport
 import (
 	"fmt"
 	"io"
-	"log/slog"
 	"net"
 	"time"
 )
@@ -111,7 +110,7 @@ func (cf *Chafon) handlePacket(packet []byte, out chan<- TagInfo) {
 		switch packetR.Status {
 		case 0x00:
 			// Detected appropiate tag
-			fmt.Println("Detected Appropiate tag")
+			//fmt.Println("Detected Appropiate tag")
 			epcInfo := TagInfo{
 				Ant:     packetR.Data[0],
 				EPCData: packetR.Data[2 : 2+int(packetR.Data[1])],
@@ -177,7 +176,7 @@ func DialTcp(address string) error {
 			}
 			break
 		}
-		slog.Debug("Received: %d bytes %X \n", n, string(buf[:n]))
+		//slog.Debug("Received: %d bytes %X \n", n, string(buf[:n]))
 		err = deserialization(buf[:n], n)
 		if err != nil {
 			return fmt.Errorf("error deserializing %s", err)

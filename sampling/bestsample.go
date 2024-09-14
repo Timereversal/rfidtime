@@ -36,9 +36,10 @@ type Broker struct {
 	Wg         sync.WaitGroup
 }
 
-func (b *Broker) StreamGenerator(id string) {
+func (b *Broker) StreamGenerator(id string, stream chan<- transport.TagInfo) {
 
 	tagInfoList := &TagHeap{}
+	fmt.Println(&tagInfoList)
 	heap.Init(tagInfoList)
 	b.StreamList[id] = make(chan transport.TagInfo)
 	b.Wg.Add(1)
@@ -55,7 +56,8 @@ func (b *Broker) StreamGenerator(id string) {
 				//fmt.Printf("tag info %+v inside stream id: %s, tagList %+v \n", v, id, *tagInfoList)
 
 			case <-time.After(10 * time.Second):
-				fmt.Printf("stream id %d timeout, minimum: %+v  \n", id, (*tagInfoList)[0])
+				fmt.Printf("stream id %d timeout, EPC: %X  \n", id, (*tagInfoList)[0].EPCData)
+				stream <- (*tagInfoList)[0]
 				//fmt.Printf(, (*h)[0])
 				return
 			}

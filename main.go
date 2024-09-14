@@ -1,14 +1,20 @@
 package main
 
 import (
+	"context"
+	"encoding/binary"
 	"flag"
 	"fmt"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log/slog"
 	"os"
 	"os/signal"
+	"rfidtime/reader"
 	"rfidtime/sampling"
 	"rfidtime/transport"
 	"syscall"
+	"time"
 )
 
 // Channel to send logs for each goroutine[bib-tag] to a log process
@@ -16,12 +22,22 @@ var chanInventory = make(chan transport.TagInfo, 10)
 
 func main() {
 
+	//var opts []grpc.DialOption
+	//conn, err := grpc.NewClient("127.0.0.1:8080", opts...)
+	//client := reader.NewReaderClient(conn)
+
 	// define log file
 	file, err := os.Create("testing")
 	if err != nil {
 		slog.Error("Error opening file: ", err)
 		panic(err)
 	}
+	conngrpc, err := grpc.NewClient("127.0.0.1:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		slog.Error("Error creating GRPCclient connection: ", err)
+	}
+	defer conngrpc.Close()
+	clientGRPC := reader.NewReaderClient(conngrpc)
 
 	// define logger handler
 	logger := slog.New(slog.NewTextHandler(file, nil))
@@ -50,6 +66,27 @@ func main() {
 
 	b := sampling.Broker{StreamList: make(map[string]chan transport.TagInfo)}
 
+	// reading from one channel to deliver grpc message to server
+	streamTagMax := make(chan transport.TagInfo)
+	go func(streamMax <-chan transport.TagInfo) {
+		for {
+			select {
+			case maxTag := <-streamMax:
+
+				fmt.Printf("max tag id %X \n ", maxTag.EPCData)
+				tagId := int32(binary.BigEndian.Uint32(maxTag.EPCData[len(maxTag.EPCData)-4:]))
+				eventId := int32(binary.BigEndian.Uint32(maxTag.EPCData[len(maxTag.EPCData)-7:]))
+				response, err := clientGRPC.Report(context.Background(), &reader.ReportRequest{TagId: tagId, EventId: eventId})
+				if err != nil {
+					fmt.Println("Error during grpc client report: ", err)
+				}
+				fmt.Println(response)
+			case <-time.After(30 * time.Second):
+				fmt.Println("timexxxxxx")
+
+			}
+		}
+	}(streamTagMax)
 	// Listening Channel info to generate log for each bib-tag
 	// assign TagInfo a corresponding Channel for specific procession (max RSSI value)
 	go func(in <-chan transport.TagInfo) {
@@ -72,7 +109,7 @@ func main() {
 
 				_, ok := b.StreamList[tagInfoID]
 				if !ok {
-					b.StreamGenerator(tagInfoID)
+					b.StreamGenerator(tagInfoID, streamTagMax)
 				}
 				// send TagInfo for Further procession [calculate  best sample ]
 				go func() {
