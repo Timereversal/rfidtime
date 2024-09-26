@@ -115,7 +115,7 @@ func (cf *Chafon) handlePacket(packet []byte, out chan<- TagInfo) {
 				Ant:     packetR.Data[0],
 				EPCData: packetR.Data[2 : 2+int(packetR.Data[1])],
 				RSSI:    int(packetR.Data[2+int(packetR.Data[1])]),
-				time:    dt,
+				Time:    dt,
 			}
 			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
 			out <- epcInfo
@@ -225,7 +225,9 @@ func handlePacket(packet []byte) {
 			// EPCData is Ok if bit 6 and bit7 of PacketR.Data[2] are 0
 			epcInfo := TagInfo{Ant: packetR.Data[0],
 				EPCData: packetR.Data[3 : 3+int(packetR.Data[2])],
-				RSSI:    int(packetR.Data[3+int(packetR.Data[2])])}
+				RSSI:    int(packetR.Data[3+int(packetR.Data[2])]),
+				Time:    dt,
+			}
 			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
 		case 0xF8:
 			fmt.Println("Antenna Error Detected")

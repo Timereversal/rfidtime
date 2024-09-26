@@ -84,3 +84,7 @@ Go Routines:
     - Encoder/Decoder RFID Systems 
     - WebServer to Store User/Event system
     - 
+
+#####################################
+- Validate packet format 
+- Decoder/Parser packet tag format to runner info.

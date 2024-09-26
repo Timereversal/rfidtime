@@ -31,7 +31,7 @@ type TagInfo struct {
 	Freq    []byte
 	LSB     byte
 	MSB     byte
-	time    time.Time
+	Time    time.Time
 }
 
 // EPCData encode User-Event Information

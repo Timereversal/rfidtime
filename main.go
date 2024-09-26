@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/protobuf/types/known/timestamppb"
 	"log/slog"
 	"os"
 	"os/signal"
@@ -76,7 +77,9 @@ func main() {
 				fmt.Printf("max tag id %X \n ", maxTag.EPCData)
 				tagId := int32(binary.BigEndian.Uint32(maxTag.EPCData[len(maxTag.EPCData)-4:]))
 				eventId := int32(binary.BigEndian.Uint32(maxTag.EPCData[len(maxTag.EPCData)-7:]))
-				response, err := clientGRPC.Report(context.Background(), &reader.ReportRequest{TagId: tagId, EventId: eventId})
+				grpcTime := timestamppb.New(maxTag.Time)
+
+				response, err := clientGRPC.Report(context.Background(), &reader.ReportRequest{TagId: tagId, EventId: eventId, RunnerTime: grpcTime})
 				if err != nil {
 					fmt.Println("Error during grpc client report: ", err)
 				}

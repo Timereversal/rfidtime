@@ -1,32 +1,9 @@
-time=2024-09-14T10:14:52.943-05:00 level=INFO msg=192.168.1.200:27011
-time=2024-09-14T10:15:07.815-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=67 tagID=9D001001
-time=2024-09-14T10:15:09.138-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=62 tagID=9D00100A
-time=2024-09-14T10:15:11.846-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=64 tagID=9D00100A
-time=2024-09-14T10:15:11.846-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=63 tagID=9D001001
-time=2024-09-14T10:15:17.457-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=65 tagID=9D001003
-time=2024-09-14T10:15:17.499-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=72 tagID=9D001001
-time=2024-09-14T10:15:17.871-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=65 tagID=9D00100A
-time=2024-09-14T10:15:19.676-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=62 tagID=9D001001
-time=2024-09-14T10:15:19.992-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=94 tagID=9D001003
-time=2024-09-14T10:15:19.992-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=78 tagID=9D00100A
-time=2024-09-14T10:15:22.277-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=73 tagID=9D00100A
-time=2024-09-14T10:15:22.278-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=70 tagID=9D001001
-time=2024-09-14T10:15:22.619-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=64 tagID=9D001003
-time=2024-09-14T10:15:24.799-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=66 tagID=9D00100A
-time=2024-09-14T10:15:25.037-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=66 tagID=9D001001
-time=2024-09-14T10:15:27.163-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=66 tagID=9D001003
-time=2024-09-14T10:15:30.657-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=70 tagID=9D00100A
-time=2024-09-14T10:15:30.978-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=64 tagID=9D001003
-time=2024-09-14T10:15:32.816-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=71 tagID=9D00100A
-time=2024-09-14T10:15:33.695-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=75 tagID=9D001003
-time=2024-09-14T10:15:38.578-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=65 tagID=9D001003
-time=2024-09-14T10:15:39.351-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=67 tagID=9D00100A
-time=2024-09-14T10:15:41.970-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=69 tagID=9D00100A
-time=2024-09-14T10:15:50.117-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=66 tagID=9D00100A
-time=2024-09-14T10:15:55.289-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=63 tagID=9D00100A
-time=2024-09-14T10:16:05.898-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=65 tagID=9D00100A
-time=2024-09-14T10:16:08.602-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=65 tagID=9D00100A
-time=2024-09-14T10:16:11.162-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=66 tagID=9D00100A
-time=2024-09-14T10:16:19.433-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=62 tagID=9D00100A
-time=2024-09-14T10:16:21.142-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=61 tagID=9D001003
-time=2024-09-14T10:16:27.290-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=64 tagID=9D00100A
+time=2024-09-25T09:49:58.474-05:00 level=INFO msg=192.168.1.200:27011
+time=2024-09-25T09:50:01.539-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=62 tagID=9D00100A
+time=2024-09-25T09:50:02.159-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=62 tagID=9D001001
+time=2024-09-25T09:50:04.206-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=73 tagID=9D00100A
+time=2024-09-25T09:50:04.887-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001003 rssi=89 tagID=9D001003
+time=2024-09-25T09:50:04.888-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D001001 rssi=78 tagID=9D001001
+time=2024-09-25T09:50:06.905-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=70 tagID=9D00100A
+time=2024-09-25T09:50:13.727-05:00 level=INFO msg="log data structure" epc=E28068940000400A9D00100A rssi=73 tagID=9D00100A
+time=2024-09-25T11:11:52.062-05:00 level=INFO msg="read tcp 192.168.1.100:61630->192.168.1.200:27011: wsarecv: An existing connection was forcibly closed by the remote host."
