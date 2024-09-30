@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-type TagHeap []transport.TagInfo
+type TagHeap []transport.RunnerData
 
 func (h TagHeap) Len() int { return len(h) }
 
@@ -22,7 +22,7 @@ func (h TagHeap) Len() int { return len(h) }
 func (h TagHeap) Less(i, j int) bool { return h[i].RSSI > h[j].RSSI }
 func (h TagHeap) Swap(i, j int)      { h[i], h[j] = h[j], h[i] }
 
-func (h *TagHeap) Push(x any) { *h = append(*h, x.(transport.TagInfo)) }
+func (h *TagHeap) Push(x any) { *h = append(*h, x.(transport.RunnerData)) }
 func (h *TagHeap) Pop() any {
 	old := *h
 	n := len(old)
@@ -32,16 +32,16 @@ func (h *TagHeap) Pop() any {
 }
 
 type Broker struct {
-	StreamList map[string]chan transport.TagInfo
+	StreamList map[int32]chan transport.RunnerData
 	Wg         sync.WaitGroup
 }
 
-func (b *Broker) StreamGenerator(id string, stream chan<- transport.TagInfo) {
+func (b *Broker) StreamGenerator(id int32, stream chan<- transport.RunnerData) {
 
 	tagInfoList := &TagHeap{}
 	fmt.Println(&tagInfoList)
 	heap.Init(tagInfoList)
-	b.StreamList[id] = make(chan transport.TagInfo)
+	b.StreamList[id] = make(chan transport.RunnerData)
 	b.Wg.Add(1)
 	go func() {
 		defer b.Wg.Done()
@@ -53,10 +53,10 @@ func (b *Broker) StreamGenerator(id string, stream chan<- transport.TagInfo) {
 			case v := <-b.StreamList[id]:
 				//tagInfoList.Push(v)
 				heap.Push(tagInfoList, v)
-				//fmt.Printf("tag info %+v inside stream id: %s, tagList %+v \n", v, id, *tagInfoList)
+				fmt.Printf("tag info %+v inside stream id: %s, tagList %+v \n", v, id, *tagInfoList)
 
 			case <-time.After(10 * time.Second):
-				fmt.Printf("stream id %d timeout, EPC: %X  \n", id, (*tagInfoList)[0].EPCData)
+				fmt.Printf("stream id %d timeout, RunnerData: %+v  \n", id, (*tagInfoList)[0])
 				stream <- (*tagInfoList)[0]
 				//fmt.Printf(, (*h)[0])
 				return

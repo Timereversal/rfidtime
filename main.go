@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"encoding/binary"
 	"flag"
 	"fmt"
 	"google.golang.org/grpc"
@@ -19,7 +18,7 @@ import (
 )
 
 // Channel to send logs for each goroutine[bib-tag] to a log process
-var chanInventory = make(chan transport.TagInfo, 10)
+var chanInventory = make(chan transport.RunnerData, 10)
 
 func main() {
 
@@ -46,11 +45,13 @@ func main() {
 
 	// Chafon address decoder
 	addr := flag.String("address", "192.168.1.200:27011", "reader tcp/ip address:port")
+	chipType := flag.String("chipType", "alienH3", "define chip type")
+
 	flag.Parse()
 	slog.Info(*addr)
 
 	// establish Connection with Chafon decoder
-	NewChafonConnection, err := transport.NewChafon(*addr)
+	NewChafonConnection, err := transport.NewChafon(*addr, *chipType)
 	if err != nil {
 		slog.Info(err.Error())
 	}
@@ -65,18 +66,18 @@ func main() {
 		os.Exit(1)
 	}()
 
-	b := sampling.Broker{StreamList: make(map[string]chan transport.TagInfo)}
+	b := sampling.Broker{StreamList: make(map[int32]chan transport.RunnerData)}
 
 	// reading from one channel to deliver grpc message to server
-	streamTagMax := make(chan transport.TagInfo)
-	go func(streamMax <-chan transport.TagInfo) {
+	streamTagMax := make(chan transport.RunnerData)
+	go func(streamMax <-chan transport.RunnerData) {
 		for {
 			select {
 			case maxTag := <-streamMax:
 
-				fmt.Printf("max tag id %X \n ", maxTag.EPCData)
-				tagId := int32(binary.BigEndian.Uint32(maxTag.EPCData[len(maxTag.EPCData)-4:]))
-				eventId := int32(binary.BigEndian.Uint32(maxTag.EPCData[len(maxTag.EPCData)-7:]))
+				fmt.Printf("max tag id %+v \n ", maxTag)
+				tagId := maxTag.TagID
+				eventId := maxTag.EventId
 				grpcTime := timestamppb.New(maxTag.Time)
 
 				response, err := clientGRPC.Report(context.Background(), &reader.ReportRequest{TagId: tagId, EventId: eventId, RunnerTime: grpcTime})
@@ -92,7 +93,7 @@ func main() {
 	}(streamTagMax)
 	// Listening Channel info to generate log for each bib-tag
 	// assign TagInfo a corresponding Channel for specific procession (max RSSI value)
-	go func(in <-chan transport.TagInfo) {
+	go func(in <-chan transport.RunnerData) {
 		// how to read
 		//for v := range in {
 		//	fmt.Printf("%+v", v)
@@ -102,21 +103,19 @@ func main() {
 
 		for {
 			select {
-			case tagInfo := <-in:
-				slog.Debug("%+v", tagInfo)
-				epcS := fmt.Sprintf("%X", tagInfo.EPCData)
+			case runnerD := <-in:
 
-				n := len(tagInfo.EPCData)
-				tagInfoID := fmt.Sprintf("%X", tagInfo.EPCData[n-4:])
-				slog.Info("log data structure", "epc", epcS, "rssi", tagInfo.RSSI, "tagID", tagInfoID)
+				slog.Debug("%+v", runnerD)
 
-				_, ok := b.StreamList[tagInfoID]
+				slog.Info("log data structure", "runnerID", runnerD.TagID, "eventID", runnerD.EventId, "rssi", runnerD.RSSI, "antenna", runnerD.Antenna)
+
+				_, ok := b.StreamList[runnerD.TagID]
 				if !ok {
-					b.StreamGenerator(tagInfoID, streamTagMax)
+					b.StreamGenerator(runnerD.TagID, streamTagMax)
 				}
 				// send TagInfo for Further procession [calculate  best sample ]
 				go func() {
-					b.StreamList[tagInfoID] <- tagInfo
+					b.StreamList[runnerD.TagID] <- runnerD
 				}()
 
 			}

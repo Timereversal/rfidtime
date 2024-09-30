@@ -1,6 +1,23 @@
 package transport
 
-import "time"
+import (
+	"fmt"
+	"strconv"
+	"time"
+)
+
+type ParseErr struct {
+	Message string
+	Err     error
+}
+
+func (e ParseErr) Error() string {
+	return e.Message
+}
+
+func (e ParseErr) Unwrap() error {
+	return e.Err
+}
 
 type Command struct {
 	Len    byte
@@ -41,6 +58,17 @@ type EPCData struct {
 	OrgID    [2]byte
 }
 
+// RunnerData store Runner information
+// TagID-EventId is unique
+type RunnerData struct {
+	TagID   int32
+	EventId int32
+	Stage   int
+	RSSI    int
+	Antenna int
+	Time    time.Time
+}
+
 //type EPC struct {
 //	EPCLen byte
 //	EPCData    []byte
@@ -48,6 +76,46 @@ type EPCData struct {
 //	Phase   []byte
 //	Freq    []byte
 //}
+
+func ParseResponse(r Response, typ string) (RunnerData, error) {
+	// Check if info is valid
+	//runnerData := RunnerData{}
+	antenna := int(r.Data[0])
+	epcData := r.Data[2 : 2+int(r.Data[1])]
+	rssi := int(r.Data[2+int(r.Data[1])])
+	switch typ {
+	case "alienH3":
+		//alienH3 chip data len - 12 bytes [24 characters].
+		// last 6 characters tagID
+		if len(epcData) != 12 {
+			return RunnerData{}, ParseErr{
+				Message: "invalid length of alienH3",
+			}
+		}
+		temp := fmt.Sprintf("%X", epcData)
+		tagId, err := strconv.Atoi(temp[len(temp)-6:])
+
+		if err != nil {
+			return RunnerData{}, ParseErr{
+				Message: fmt.Sprintf("invalid tagId %s", temp[len(temp)-6:]),
+				Err:     err,
+			}
+
+		}
+		eventId, err := strconv.Atoi(temp[len(temp)-12 : len(temp)-6])
+		if err != nil {
+			return RunnerData{}, ParseErr{
+				Message: fmt.Sprintf("invalid eventId %s", temp[len(temp)-12:len(temp)-6]),
+				Err:     err,
+			}
+		}
+
+		return RunnerData{TagID: int32(tagId), EventId: int32(eventId), RSSI: rssi, Antenna: antenna}, nil
+
+	}
+
+	return RunnerData{}, fmt.Errorf("error during parsing %+v  chipType %s", r, typ)
+}
 
 //Data: 15(len) [00](addr) [01](ReCMD)[03](Fruther data will be transfered)
 //	    [01](antena)[01](only-1 tag )[0c]e28068940000500a9d2298c6  48257e

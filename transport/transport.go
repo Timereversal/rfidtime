@@ -22,18 +22,22 @@ type ChafonInterface interface {
 
 type Chafon struct {
 	connection *net.Conn
+	ChipType   string
 }
 
 // NewChafon generate a Chafon struct pointer where address is chafon reader ip
 // address format example 192.168.1.200:27011
-func NewChafon(address string) (*Chafon, error) {
+func NewChafon(address string, chipType string) (*Chafon, error) {
 	conn, err := net.Dial("tcp", address)
 	//defer conn.Close()
 	if err != nil {
 		return &Chafon{}, nil
 	}
 
-	cf := Chafon{connection: &conn}
+	cf := Chafon{
+		connection: &conn,
+		ChipType:   chipType,
+	}
 	return &cf, nil
 }
 
@@ -54,7 +58,7 @@ func (cf *Chafon) ReceiveCommand() ([]byte, error) {
 
 // StartInventory - there are several ways to perform Inventory
 // current mode only support RealTimeInventory
-func (cf *Chafon) StartInventory(out chan<- TagInfo) error {
+func (cf *Chafon) StartInventory(out chan<- RunnerData) error {
 	// byte qty per rfid AlienH3  22bytes
 	err := cf.SendCommand(cmdModeRealTimeInventory)
 	if err != nil {
@@ -82,7 +86,7 @@ func (cf *Chafon) StartInventory(out chan<- TagInfo) error {
 
 // deserialization, TCP DATA contains more than 1 EPC information. this function generate a new goroutine to process
 // each EPC information using the handlePacket function
-func (cf *Chafon) deserialization(payload []byte, bytesNumber int, out chan<- TagInfo) error {
+func (cf *Chafon) deserialization(payload []byte, bytesNumber int, out chan<- RunnerData) error {
 	var totalBytes int
 
 	for totalBytes < bytesNumber {
@@ -97,7 +101,7 @@ func (cf *Chafon) deserialization(payload []byte, bytesNumber int, out chan<- Ta
 	return nil
 }
 
-func (cf *Chafon) handlePacket(packet []byte, out chan<- TagInfo) {
+func (cf *Chafon) handlePacket(packet []byte, out chan<- RunnerData) {
 
 	dt := time.Now()
 	// packet analysis response.
@@ -117,8 +121,15 @@ func (cf *Chafon) handlePacket(packet []byte, out chan<- TagInfo) {
 				RSSI:    int(packetR.Data[2+int(packetR.Data[1])]),
 				Time:    dt,
 			}
+			runnerD, err := ParseResponse(packetR, cf.ChipType)
+			if err != nil {
+				fmt.Printf("Error parsing response: %s\n", err)
+				return
+			}
+			runnerD.Time = dt
 			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
-			out <- epcInfo
+			fmt.Printf("Runner-ID: %d, EventID: %d, RSSI: %d, time: %s \n", runnerD.TagID, runnerD.EventId, runnerD.RSSI, dt.Format("01-02-2006 15:04:05"))
+			out <- runnerD
 		}
 		return
 	}
@@ -228,7 +239,7 @@ func handlePacket(packet []byte) {
 				RSSI:    int(packetR.Data[3+int(packetR.Data[2])]),
 				Time:    dt,
 			}
-			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
+			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitttttttted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
 		case 0xF8:
 			fmt.Println("Antenna Error Detected")
 		}
