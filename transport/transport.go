@@ -23,11 +23,12 @@ type ChafonInterface interface {
 type Chafon struct {
 	connection *net.Conn
 	ChipType   string
+	Stage      int
 }
 
 // NewChafon generate a Chafon struct pointer where address is chafon reader ip
 // address format example 192.168.1.200:27011
-func NewChafon(address string, chipType string) (*Chafon, error) {
+func NewChafon(address string, chipType string, stage int) (*Chafon, error) {
 	conn, err := net.Dial("tcp", address)
 	//defer conn.Close()
 	if err != nil {
@@ -37,6 +38,7 @@ func NewChafon(address string, chipType string) (*Chafon, error) {
 	cf := Chafon{
 		connection: &conn,
 		ChipType:   chipType,
+		Stage:      stage,
 	}
 	return &cf, nil
 }

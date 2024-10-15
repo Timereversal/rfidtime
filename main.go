@@ -47,14 +47,18 @@ func main() {
 	addr := flag.String("address", "192.168.1.200:27011", "reader tcp/ip address:port")
 	chipType := flag.String("chipType", "alienH3", "define chip type")
 
+	stage := flag.Int("stage", 1, "define stage to run")
+
 	flag.Parse()
 	slog.Info(*addr)
 
 	// establish Connection with Chafon decoder
-	NewChafonConnection, err := transport.NewChafon(*addr, *chipType)
+	NewChafonConnection, err := transport.NewChafon(*addr, *chipType, *stage)
 	if err != nil {
 		slog.Info(err.Error())
 	}
+	stag := int32(NewChafonConnection.Stage)
+	fmt.Println("stageee", stag)
 
 	// listening for Ctr+C
 	c := make(chan os.Signal)
@@ -80,7 +84,7 @@ func main() {
 				eventId := maxTag.EventId
 				grpcTime := timestamppb.New(maxTag.Time)
 
-				response, err := clientGRPC.Report(context.Background(), &reader.ReportRequest{TagId: tagId, EventId: eventId, RunnerTime: grpcTime})
+				response, err := clientGRPC.Report(context.Background(), &reader.ReportRequest{TagId: tagId, EventId: eventId, RunnerTime: grpcTime, Stage: stag})
 				if err != nil {
 					fmt.Println("Error during grpc client report: ", err)
 				}
