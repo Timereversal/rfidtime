@@ -12,6 +12,7 @@ var cmdAnswerMode = []byte{0x09, 0x00, 0x01, 0x04, 0xfe, 0x00, 0x80, 0x32, 0x80,
 var cmdRealTimeInventoryParam = []byte{}
 var cmdModeRealTimeInventory = []byte{0x05, 0x00, 0x76, 0x01, 0xeb, 0xd8}
 var CmdModeAnswer = []byte{0x05, 0x00, 0x76, 0x00, 0x62, 0xc9}
+var cmdModeFastTimeInventory = []byte{0x05, 0x00, 0x50, 0x00, 0x81, 0xbe}
 
 // channel to communicate with logger goroutine (struct TagInfo transmitted)
 
@@ -62,7 +63,7 @@ func (cf *Chafon) ReceiveCommand() ([]byte, error) {
 // current mode only support RealTimeInventory
 func (cf *Chafon) StartInventory(out chan<- RunnerData) error {
 	// byte qty per rfid AlienH3  22bytes
-	err := cf.SendCommand(cmdModeRealTimeInventory)
+	err := cf.SendCommand(cmdModeFastTimeInventory)
 	if err != nil {
 		return err
 	}
