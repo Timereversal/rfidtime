@@ -27,11 +27,7 @@ func main() {
 	//client := reader.NewReaderClient(conn)
 
 	// define log file
-	file, err := os.Create("testing")
-	if err != nil {
-		slog.Error("Error opening file: ", err)
-		panic(err)
-	}
+
 	conngrpc, err := grpc.NewClient("127.0.0.1:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		slog.Error("Error creating GRPCclient connection: ", err)
@@ -39,18 +35,28 @@ func main() {
 	defer conngrpc.Close()
 	clientGRPC := reader.NewReaderClient(conngrpc)
 
-	// define logger handler
-	logger := slog.New(slog.NewTextHandler(file, nil))
-	slog.SetDefault(logger)
-
 	// Chafon address decoder
 	addr := flag.String("address", "192.168.1.200:27011", "reader tcp/ip address:port")
 	chipType := flag.String("chipType", "alienH3", "define chip type")
-
 	stage := flag.Int("stage", 1, "define stage to run")
+	//eventName := flag.String("logFileName", "test", "define log filename")
+
+	t := time.Now()
+	tFormat := t.Format("20060102150405")
+
+	eventName := flag.String("eventName", "test_"+tFormat+".log", "define log filename")
 
 	flag.Parse()
 	slog.Info(*addr)
+
+	file, err := os.Create(*eventName + "_" + tFormat + ".log")
+	if err != nil {
+		slog.Error("Error opening file: ", err)
+		panic(err)
+	}
+	// define logger handler
+	logger := slog.New(slog.NewTextHandler(file, nil))
+	slog.SetDefault(logger)
 
 	// establish Connection with Chafon decoder
 	NewChafonConnection, err := transport.NewChafon(*addr, *chipType, *stage)

@@ -76,7 +76,7 @@ func (cf *Chafon) StartInventory(out chan<- RunnerData) error {
 			}
 			break
 		}
-		fmt.Printf("Received: %d bytes %X \n", n, string(buf[:n]))
+		//fmt.Printf("Received: %d bytes %X \n", n, string(buf[:n]))
 		//err = deserialization(buf[:n], n)
 		err = cf.deserialization(buf[:n], n, out)
 		if err != nil {

@@ -53,10 +53,10 @@ func (b *Broker) StreamGenerator(id int32, stream chan<- transport.RunnerData) {
 			case v := <-b.StreamList[id]:
 				//tagInfoList.Push(v)
 				heap.Push(tagInfoList, v)
-				fmt.Printf("tag info %+v inside stream id: %s, tagList %+v \n", v, id, *tagInfoList)
+				//fmt.Printf("tag info %+v inside stream id: %s, tagList %+v \n", v, id, *tagInfoList)
 
-			case <-time.After(10 * time.Second):
-				fmt.Printf("stream id %d timeout, RunnerData: %+v  \n", id, (*tagInfoList)[0])
+			case <-time.After(200 * time.Second):
+				//fmt.Printf("stream id %d timeout, RunnerData: %+v  \n", id, (*tagInfoList)[0])
 				stream <- (*tagInfoList)[0]
 				//fmt.Printf(, (*h)[0])
 				return
