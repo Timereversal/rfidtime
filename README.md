@@ -30,7 +30,8 @@ TODO List
  -  Find a way to send a command to stop realtime inventory on demand like graceful shutdown
  -  Test Realtime inventory with more labels.
  -  Find a way to perform Answer Mode inventory/ equipment no anwser always to the same command.
- -  add file log.
+ -  add file log. [added]
+ -  add Algorithm option for bib tag sample selection.[current conf only work for max rssi value]
  -  Define Group structure for like RunnerID , Group/Category.
    - runner range [1-10000] 2 byte
    - runner category [1-16] 1 byte

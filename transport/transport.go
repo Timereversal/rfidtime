@@ -3,6 +3,7 @@ package transport
 import (
 	"fmt"
 	"io"
+	"log/slog"
 	"net"
 	"time"
 )
@@ -60,9 +61,9 @@ func (cf *Chafon) ReceiveCommand() ([]byte, error) {
 }
 
 // StartInventory - there are several ways to perform Inventory
-// current mode only support RealTimeInventory
+// current mode only support RealTimeInventory and FastTimeInventory
 func (cf *Chafon) StartInventory(out chan<- RunnerData) error {
-	// byte qty per rfid AlienH3  22bytes
+
 	err := cf.SendCommand(cmdModeFastTimeInventory)
 	if err != nil {
 		return err
@@ -112,26 +113,28 @@ func (cf *Chafon) handlePacket(packet []byte, out chan<- RunnerData) {
 	// Packet parsing
 	packetR := Response{Len: packet[0], Adr: packet[1], ReCmd: packet[2], Status: packet[3], Data: packet[4:len(packet)]}
 
-	// handling response of RealTime inventory [Handle set mode Realtime Inventory]
+	// handling response of RealTime inventory [Handle set mode Realtime Inventory]/ FastInventory
 	if packetR.ReCmd == 0xee { // set mode RealTime Inventory
 		switch packetR.Status {
 		case 0x00:
 			// Detected appropiate tag
 			//fmt.Println("Detected Appropiate tag")
-			epcInfo := TagInfo{
-				Ant:     packetR.Data[0],
-				EPCData: packetR.Data[2 : 2+int(packetR.Data[1])],
-				RSSI:    int(packetR.Data[2+int(packetR.Data[1])]),
-				Time:    dt,
-			}
+			//epcInfo := TagInfo{
+			//	Ant:     packetR.Data[0],
+			//	EPCData: packetR.Data[2 : 2+int(packetR.Data[1])],
+			//	RSSI:    int(packetR.Data[2+int(packetR.Data[1])]),
+			//	Time:    dt,
+			//}
 			runnerD, err := ParseResponse(packetR, cf.ChipType)
 			if err != nil {
-				fmt.Printf("Error parsing response: %s\n", err)
+				//fmt.Printf("Error parsing response: %s\n", err)
+				slog.Debug("Handle-Packet", "Error", err)
 				return
 			}
 			runnerD.Time = dt
-			fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
-			fmt.Printf("Runner-ID: %d, EventID: %d, RSSI: %d, time: %s \n", runnerD.TagID, runnerD.EventId, runnerD.RSSI, dt.Format("01-02-2006 15:04:05"))
+			slog.Debug("HandlePacket: ", "Runner-ID", runnerD.TagID, "EventID", runnerD.EventId, "RSSI", runnerD.RSSI, "time", dt.Format("01-02-2006 15:04:05"))
+			//fmt.Printf("%d,epc:%X,rssi:%d,%X Packet being transmitted at %s \n", packetR.Len, epcInfo.EPCData, epcInfo.RSSI, packetR.Data, dt.Format("01-02-2006 15:04:05"))
+			//fmt.Printf("Runner-ID: %d, EventID: %d, RSSI: %d, time: %s \n", runnerD.TagID, runnerD.EventId, runnerD.RSSI, dt.Format("01-02-2006 15:04:05"))
 			out <- runnerD
 		}
 		return

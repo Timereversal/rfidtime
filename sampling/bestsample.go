@@ -5,7 +5,7 @@ package sampling
 
 import (
 	"container/heap"
-	"fmt"
+	"log/slog"
 	"rfidtime/transport"
 	"sync"
 	"time"
@@ -39,7 +39,7 @@ type Broker struct {
 func (b *Broker) StreamGenerator(id int32, stream chan<- transport.RunnerData) {
 
 	tagInfoList := &TagHeap{}
-	fmt.Println(&tagInfoList)
+	//fmt.Println(&tagInfoList)
 	heap.Init(tagInfoList)
 	b.StreamList[id] = make(chan transport.RunnerData)
 	b.Wg.Add(1)
@@ -55,8 +55,10 @@ func (b *Broker) StreamGenerator(id int32, stream chan<- transport.RunnerData) {
 				heap.Push(tagInfoList, v)
 				//fmt.Printf("tag info %+v inside stream id: %s, tagList %+v \n", v, id, *tagInfoList)
 
-			case <-time.After(200 * time.Second):
+			case <-time.After(5 * time.Second):
 				//fmt.Printf("stream id %d timeout, RunnerData: %+v  \n", id, (*tagInfoList)[0])
+				//  Delivery Best Sample [high RSSI] to a channel designed for GRPC delivery.
+				slog.Debug("BestSample: delivery to channel for grpc procedure", "Runner Data", (*tagInfoList)[0])
 				stream <- (*tagInfoList)[0]
 				//fmt.Printf(, (*h)[0])
 				return
